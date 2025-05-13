@@ -1,16 +1,21 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout') {
+        stage('GitHub Checkout') {
             steps {
-                git credentialsId: 'github-creds', url: 'https://github.com/Nihat58/arscom.git', branch: 'main'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Kod başarıyla çekildi. Jenkins pipeline çalışıyor.'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    extensions: [
+                        [$class: 'CloneOption', 
+                         depth: 1,  // Sadece son commit'i çeker
+                         shallow: true]
+                    ],
+                    userRemoteConfigs: [[
+                        credentialsId: 'github-ssh',
+                        url: 'git@github.com:nihat58/repo.git'
+                    ]]
+                ])
             }
         }
     }
