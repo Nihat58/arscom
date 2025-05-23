@@ -6,14 +6,9 @@
                 checkout scm
             }
         }
-        stage('Deploy to AWS') {
+        stage('Deploy') {
             steps {
-                sshagent(['aws-ssh-key']) {
-                    sh '''
-                    scp -o StrictHostKeyChecking=no * ec2-user@YOUR_EC2_IP:/var/www/html/
-                    ssh -o StrictHostKeyChecking=no ec2-user@YOUR_EC2_IP "sudo systemctl restart httpd"
-                    '''
-                }
+                bat 'echo Hello World'
             }
         }
     }
